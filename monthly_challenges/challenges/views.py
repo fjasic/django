@@ -1,42 +1,31 @@
+from django.http import HttpResponseNotFound, HttpResponseRedirect, Http404
 from django.shortcuts import render
-from django.http import (
-    HttpResponse,
-    HttpResponseNotFound,
-    HttpResponseRedirect,
-)
 from django.urls import reverse
 
 monthly_challenges = {
-    "january": "New Year 1 resolution!",
-    "february": "New Year 2 resolution!",
-    "march": "New Year 3 resolution!",
-    "april": "New Year 4 resolution!",
-    "may": "New Year 5 resolution!",
-    "jun": "New Year 6 resolution!",
-    "july": "New Year 7 resolution!",
-    "august": "New Year 8 resolution!",
-    "september": "New Year 9 resolution!",
-    "october": "New Year 10 resolution!",
-    "novemeber": "New Year 11 resolution!",
-    "december": "New Year 12 resolution!",
+    "january": "New Year's 1th resolution!",
+    "february": "New Year's 2nd resolution!",
+    "march": "New Year's 3th resolution!",
+    "april": "New Year's 4th resolution!",
+    "may": "New Year's 5th resolution!",
+    "jun": "New Year's 6th resolution!",
+    "july": "New Year's 7th resolution!",
+    "august": "New Year's 8th resolution!",
+    "september": "New Year's 9th resolution!",
+    "october": "New Year's 10th resolution!",
+    "novemeber": "New Year's 11th resolution!",
+    "december": None,
 }
 
 # Create your views here.
 
 
 def index_view(request):
-    list_item = ""
-    months = list(monthly_challenges.keys())
-    for month in months:
-        capitalized_month = month.capitalize()
-        month_path = reverse("month-challenge", args=[month])
-        list_item += f"<li><a href='{month_path}'>{capitalized_month}</a></li>"
-    response_data = f"""
-        <ul>
-        {list_item}
-        </ul>
-    """
-    return HttpResponse(response_data)
+    months = {}
+    months_keys = list(monthly_challenges.keys())
+    for month in months_keys:
+        months.update({month: reverse("month-challenge", args=[month])})
+    return render(request, "challenges/index.html", {"months": months})
 
 
 def monthly_challenge_number(request, month):
@@ -50,7 +39,11 @@ def monthly_challenge_number(request, month):
 
 def monthly_challenge(request, month):
     if month in monthly_challenges.keys():
-        response_data = f"<h1>{monthly_challenges.get(month)}</h1>"
-        return HttpResponse(response_data)
+        text = monthly_challenges.get(month)
+        return render(
+            request,
+            "challenges/challenge.html",
+            {"text": text, "month": month},
+        )
     else:
-        return HttpResponseNotFound("<h1>this month doesnt exist!</h1>")
+        raise Http404()
