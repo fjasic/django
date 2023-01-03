@@ -1,0 +1,35 @@
+{% extends 'app.html' %}
+{% load static %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static "blog/post.css" %}">
+<link rel="stylesheet" href="{% static "blog/index.css" %}">
+{% endblock css_files %}
+
+{% block page_title %}
+Index
+{% endblock %}
+
+{% block content %}
+<section id="welcome">
+    <header>
+        <img src="{% static 'blog/images/me.jpg' %}" alt="Blog Author"/>
+    </header>
+    <p>Welcome to this blog</p>
+</section>
+
+<section id="latest-posts">
+    <h2>Latest posts</h2>
+    <ul>
+        {% for blog in blogs %}
+            {% include "blog/includes/preview.html" %}
+        {% endfor %}
+    </ul>
+</section>
+
+<section id="about">
+    <h2>What I do</h2>
+    <p>Why do you care?</p>
+</section>
+
+{% endblock content %}
