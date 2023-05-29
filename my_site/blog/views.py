@@ -67,7 +67,7 @@ blogs = [
         """,
     },
 ]
-blogs = sorted(blogs, key=lambda post: post["date"], reverse=True)
+blogs.sort(key=lambda post: post["date"], reverse=True)
 
 # Create your views here.
 def index(request):
